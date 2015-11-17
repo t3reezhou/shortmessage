@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>jquery表单获取短信验证码代码</title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //获取短信验证码
+            var validCode = true;
+            $(".msgs").click(function (event) {
+                var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+                if (!myreg.test($("#phone").val())) {
+                    alert("手机号码不合法！");
+                    $("#phone").focus();
+                    return false;
+                }
+                var time = 30;
+                var code = $(this);
+                if (validCode) {
+                    validCode = false;
+                    code.addClass("msgs1");
+                    var t = setInterval(function () {
+                        time--;
+                        code.html(time + "秒");
+                        if (time == 0) {
+                            clearInterval(t);
+                            code.html("重新获取");
+                            validCode = true;
+                            code.removeClass("msgs1");
+                        }
+                    }, 1000);
+                    $.ajax({url: "./send_code.php", data: {phone: $("#phone").val()}});
+                }
+            });
+            $("#check").click(function () {
+                var code = $("#code").val();
+                if (code == '') {
+                    alert("验证码不为空");
+                    return false;
+                }
+                else {
+                    $.ajax({
+                        url: "./check_code.php",
+                        data: {code: $("#code").val()},
+                        success: function (data) {
+                            alert(data);
+                            if (data == "successful") {
+                                location.href = "./index.php";
+                            }
+                            else if(data == "fail"){
+                                alert("验证码错误");
+                            }
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+    <style type="text/css">
+        form {
+            margin: auto;
+            text-align: center
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            line-height: 40px;
+            margin-right: 10px;
+        }
+
+        input {
+            width: 212px;
+            height: 38px;
+            border-style: none;
+            padding: 0 4px;
+            border: 1px solid #C8C8C8;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        .msgs {
+            display: inline-block;
+            width: 104px;
+            color: #fff;
+            font-size: 12px;
+            border: 1px solid #0697DA;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            background: #0697DA;
+            cursor: pointer;
+        }
+
+        .msgs1 {
+            background: #E6E6E6;
+            color: #818080;
+            border: 1px solid #CCCCCC;
+        }
+    </style>
+</head>
+
+<body>
+<div style="text-align:center">
+    <label>手机</label>
+    <input type="text" class="c_code_msg" style="margin-right: 10px;width: 200px" id="phone"/>
+    <span class="msgs">获取短信验证码</span>
+</div>
+<!--<form action="./check_code.php" method="get">-->
+<div style="text-align: center">
+    <label>验证码</label>
+    <input type="text" class="c_code_msg" style="margin-right: 10px;width: 200px" name="code" id="code"/>
+    <input type="button" id="check" style="display: inline-block;
+            width: 104px;
+            color: #fff;
+            font-size: 12px;
+            border: 1px solid #0697DA;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            background: #0697DA;
+            cursor: pointer;" value="提交"/>
+</div>
+<!--</form>-->
+</body>
+
+</html>
