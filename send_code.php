@@ -20,7 +20,9 @@ $_SESSION["code"] = $time; //保存验证码
 
 
 $phone = $_GET["phone"];
-$url = "http://apis.haoservice.com/sms/send?mobile={$phone}&tpl_id=2&tpl_value=%23code%23%3d{$time}%26%23company%23%3d%E4%B8%80%E7%BA%BF%E7%94%9F%E9%B8%A1&key=e973e75f2b994ec09e10bb0aeddfe1f2";
+$company = '';
+$key = '';
+$url = "http://apis.haoservice.com/sms/send?mobile={$phone}&tpl_id=2&tpl_value=%23code%23%3d{$time}%26%23company%23%3d{$company}&key={$key}";
 //执行curl，发送验证码
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
