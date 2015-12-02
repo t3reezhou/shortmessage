@@ -4,13 +4,13 @@
 ## 1. 根据手机号码发送验证码
 ### 关于haoservice
 公司这边外包项目为了实现短信验证功能而向haoservice买的功能，其实就是一串url，在里面有几个参数。
-http://apis.haoservice.com/sms/send?mobile={$phone}&tpl_id=2&tpl_value=%23code%23%3d{$code}%26%23company%23%3d{$company}&key={$key}
+http://apis.haoservice.com/sms/send?mobile{$phone}&tpl_id=2&tpl_value=%23code%23%3d{$code}%26%23company%23%3d{$company}&key={$key}
 
 比较重要的是以下几个：
 mobile 你所要发送验证码的号码
 tpl_value 为你要发送的信息，注意，必须以
 \#code#={$code}&#company#={$company}
-形式去urlEncode,其中的{$code}是你要发送的验证码，{$company}为你的公司名
+形式去urlEncode,其中的{$code}是你要发送的验证码，{$company}为你的公司名,{$key}则是你向haoservice购买服务后提供给你的key值
 直接访问即可发送验证码
 
 验证码可以根据自己需要随意生成，电话号码就得通过用户输入，再通过表单提交或者ajax来实现
